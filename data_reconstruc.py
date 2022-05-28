@@ -3,13 +3,15 @@ import numpy as np
 import matplotlib.pyplot as plt 
 import seaborn as sns 
 
-def obtain_packet(): 
+#separates the digital data to packets with length 16 bits 
+def obtain_packet(items): 
     set = []  
-    values = np.array(data['Value'])
-    for i in range(int(len(data)/16)): 
+    values = np.array(items['Value'])
+    for i in range(int(len(items)/16)): 
         set.append(values[16*i:16*(i+1)])
     return set 
 
+#processes the obtained packets for digital to analog conversion 
 def get_DAC(packet): 
     if sum(packet)%2 == 1:
         return 0 
@@ -19,27 +21,50 @@ def get_DAC(packet):
         dec = analog/1023 
         return dec 
 
-data = pd.read_csv('demod_out_C_Normal_2.txt', sep=" ", header=None)
-data.columns = ['Time','Value'] 
+#obtains the time vector and the analog data
+def get_time_value(df):
+    df['Value'].replace({-5:0, 5:1}, inplace=True)
+    packets = obtain_packet(df)
+    analog_values = [] 
+    for i in packets: 
+        analog_values.append(get_DAC(i)*5) 
+    time = np.arange(0,len(analog_values)*(1/2000),1/2000)
+    return time, analog_values
 
-data['Value'].replace({-5:0, 5:1}, inplace=True) 
-packets = obtain_packet()
+#export to xlsx
+def export_xlsx(x,y,title):
+    analog_data = pd.DataFrame({'Time': x, 'Values' : y}) 
+    analog_data.to_excel(f'{title}.xlsx')
 
-analog_values = []
-for i in packets: 
-    analog_values.append(get_DAC(i)*5) 
+data_1 = pd.read_csv('demod_out_A_Normal_2.txt', sep=" ", header=None)
+data_1.columns = ['Time','Value']
 
-time = np.arange(0,len(analog_values)*(1/2000),1/2000)
+data_2 = pd.read_csv('demod_out_C_Normal_2.txt', sep=" ", header=None)
+data_2.columns = ['Time','Value'] 
 
-analog_data = pd.DataFrame({'Time': time, 'Values' : analog_values}) 
+time_1,analog_values_1 = get_time_value(data_1)
+time_2,analog_values_2 = get_time_value(data_2)
 
-analog_data.to_excel('ReconstructedData.xlsx')
+export_xlsx(time_1, analog_values_1,'demod_out_A_normal_2')
+export_xlsx(time_2, analog_values_2,'demod_out_C_normal_2')
 
+
+#plotting 
 sns.set()
 sns.set_style("whitegrid") 
 
-plt.plot(time,analog_values)
-plt.title('Reconstructed EMG Signal')
-plt.xlabel('Time (s)')
-plt.ylabel('Voltage (mV)')
+fig,axes = plt.subplots(2)
+axes[0].plot(time_1,analog_values_1) 
+axes[1].plot(time_2,analog_values_2)
+
+axes[0].set_title('demod_out_A_Normal_2')
+axes[1].set_title('demod_out_C_Normal_2')
+
+axes[0].set_ylabel('Voltage (mV)')
+axes[0].set_xlabel('Time (s)')
+
+axes[1].set_ylabel('Voltage (mV)')
+axes[1].set_xlabel('Time (s)')
+
+plt.tight_layout()
 plt.show()
