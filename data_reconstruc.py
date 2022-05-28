@@ -40,6 +40,6 @@ sns.set_style("whitegrid")
 
 plt.plot(time,analog_values)
 plt.title('Reconstructed EMG Signal')
-plt.xlabel('Time')
+plt.xlabel('Time (s)')
 plt.ylabel('Voltage (mV)')
 plt.show()
