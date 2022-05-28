@@ -1,6 +1,7 @@
 import pandas as pd 
 import numpy as np 
 import matplotlib.pyplot as plt 
+import seaborn as sns 
 
 def obtain_packet(): 
     set = []  
@@ -30,9 +31,15 @@ for i in packets:
 
 time = np.arange(0,len(analog_values)*(1/2000),1/2000)
 
+analog_data = pd.DataFrame({'Time': time, 'Values' : analog_values}) 
+
+analog_data.to_excel('ReconstructedData.xlsx')
+
+sns.set()
+sns.set_style("whitegrid") 
+
 plt.plot(time,analog_values)
 plt.title('Reconstructed EMG Signal')
 plt.xlabel('Time')
 plt.ylabel('Voltage (mV)')
-plt.grid()
 plt.show()
