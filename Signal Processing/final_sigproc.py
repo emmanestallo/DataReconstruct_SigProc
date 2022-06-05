@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt 
 import seaborn as sns 
 
-data = pd.read_csv('demod_out_C_Normal_2.csv')
+data = pd.read_csv('demod_out_B_BPI_2.csv')
 
 time = data['Time'].to_numpy()
 val = data['Values'].to_numpy()
@@ -25,7 +25,7 @@ rs = np.abs(sig1)
 
 #post-processed signal
 sig_filt = sigproc.filtfilt(b20Hz,a20Hz,rs) 
-sig_filt = sigproc.filtfilt(b450Hz,a450Hz,sig_filt)
+#sig_filt = sigproc.filtfilt(b450Hz,a450Hz,sig_filt)
 
 
 window = 0.3 
@@ -68,7 +68,7 @@ for idx in range (len(test_sig)):
         if offset:
             offset_time.append(time[idx]) 
 
-epsilon = 2
+epsilon = 1
 
 least_onset = [] 
 least_offset = [] 
@@ -85,7 +85,7 @@ for j in range (1,len(offset_time)):
     if offset_time[j] - offset_time[j-1] < epsilon: 
         continue 
     else: 
-        least_offset.append(offset_time[j+1])
+        least_offset.append(offset_time[j])
 
 print(least_onset)
 print(least_offset)
