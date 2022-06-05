@@ -35,7 +35,13 @@ SD = np.array([np.std(element) for element in sets])
 mean = np.array([np.mean(element) for element in sets])
 
 min_SD_idx = np.where(SD == np.min(SD))
-mean_min_idx = mean[min_SD_idx]
+mean_min_idx = mean[min_SD_idx]  
+
+h=3 
+
+th = mean_min_idx + h*np.mind(SD) 
+
+
 
 print(mean_min_idx)
 sns.set()
