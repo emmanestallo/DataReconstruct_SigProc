@@ -42,7 +42,7 @@ data_1.columns = ['Time','Value']
 data_2 = pd.read_csv('demod_out_C_Normal_2.txt', sep=" ", header=None)
 data_2.columns = ['Time','Value'] 
 
-data_3 = pd.read_csv('demod_out_B_Normal_1.txt', sep=" ", header=None)
+data_3 = pd.read_csv('demod_out_B_BPI_2.txt', sep=" ", header=None)
 data_3.columns = ['Time','Value'] 
 
 time_1,analog_values_1 = get_time_value(data_1)
@@ -51,7 +51,7 @@ time_3,analog_values_3 = get_time_value(data_3)
 
 export_xlsx(time_1, analog_values_1,'demod_out_A_normal_2')
 export_xlsx(time_2, analog_values_2,'demod_out_C_normal_2')
-export_xlsx(time_3, analog_values_3,'demod_out_B_normal_1')
+export_xlsx(time_3, analog_values_3,'demod_out_B_BPI_2')
 
 #plotting 
 sns.set()

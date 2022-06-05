@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt 
 import seaborn as sns 
 
-data = pd.read_csv('demod_out_C_normal_2.csv')
+data = pd.read_csv('demod_out_C_Normal_2.csv')
 
 time = data['Time'].to_numpy()
 val = data['Values'].to_numpy()
@@ -15,7 +15,7 @@ fc3 = 20
 
 #filter parameters
 b10Hz, a10Hz = sigproc.butter(4,fc1,'high', analog=False, fs=2000) 
-#b450Hz, a450Hz = sigproc.butter(4,fc2,'low', analog=False, fs= 2000) 
+b450Hz, a450Hz = sigproc.butter(4,fc2,'low', analog=False, fs= 2000) 
 b20Hz, a20Hz = sigproc.butter(2,fc3,'low', analog=False, fs=2000)
 
 #filter and envelope detector
@@ -25,6 +25,7 @@ rs = np.abs(sig1)
 
 #post-processed signal
 sig_filt = sigproc.filtfilt(b20Hz,a20Hz,rs) 
+sig_filt = sigproc.filtfilt(b450Hz,a450Hz,sig_filt)
 
 
 window = 0.3 
@@ -48,7 +49,7 @@ th = mean_min_idx + h*np.min(SD)
 onset_time = [] 
 offset_time = []
 
-test_sig = sigproc.savgol_filter(sig_filt,300,polyorder=7)
+test_sig = sigproc.savgol_filter(sig_filt,100,polyorder=7)
 
 for idx in range (len(test_sig)): 
     if (test_sig[idx] > th) and (len(onset_time) == len(offset_time)): 
