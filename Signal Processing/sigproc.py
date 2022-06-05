@@ -23,6 +23,20 @@ sig_filt = sigproc.filtfilt(b20Hz,a20Hz,sig2)
 
 rs = np.abs(sig_filt) 
 
+window = 0.3 
+period = 1/2000 
+SD = []
+
+nsamp = int(window/period)
+pad = np.zeros(430) 
+
+zero_pad_val = np.append(val,pad)
+
+sets = [zero_pad_val[n:n+nsamp] for n in range(0,len(val),nsamp)]
+
+SD = [np.std(element) for element in sets]
+
+print(SD)
 
 sns.set()
 sns.set_style("darkgrid")
