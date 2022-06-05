@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt 
 import seaborn as sns 
 
-data = pd.read_csv('demod_out_A_normal_2.csv')
+data = pd.read_csv('demod_out_C_normal_2.csv')
 
 time = data['Time'].to_numpy()
 val = data['Values'].to_numpy()
@@ -48,27 +48,59 @@ th = mean_min_idx + h*np.min(SD)
 onset_time = [] 
 offset_time = []
 
-for idx in range (len(sig_filt)): 
-    if (sig_filt[idx] > th) and (len(onset_time) == len(offset_time)): 
+test_sig = sigproc.savgol_filter(sig_filt,300,polyorder=7)
+
+for idx in range (len(test_sig)): 
+    if (test_sig[idx] > th) and (len(onset_time) == len(offset_time)): 
         onset = True 
-        for element in sig_filt[idx:idx+25]:
+        for element in test_sig[idx:idx+25]:
             if element < th: 
                 onset = False 
         if onset:
             onset_time.append(time[idx]) 
 
-    elif (sig_filt[idx] < th) and (len(onset_time) > len(offset_time)): 
+    elif (test_sig[idx] < th) and (len(onset_time) > len(offset_time)): 
         offset = True
-        for element in sig_filt[idx:idx+25]:
+        for element in test_sig[idx:idx+25]:
             if element > th: 
                 offset = False 
         if offset:
-            offset_time.append(time[idx])
+            offset_time.append(time[idx]) 
 
+
+
+epsilon = 2
+
+least_onset = [] 
+least_offset = [] 
+
+for j in range (1,len(onset_time)):  
+    least = onset_time[j]
+    if onset_time[j] - onset_time[j-1] < epsilon: 
+        continue 
+    else: 
+        least_onset.append(onset_time[j-1])
+
+for j in range (1,len(offset_time)):  
+    least = offset_time[j]
+    if offset_time[j] - offset_time[j-1] < epsilon: 
+        continue 
+    else: 
+        least_offset.append(offset_time[j+1])
+
+print(least_onset)
+print(least_offset)
 
 print(onset_time)
 print(offset_time)
+
 sns.set()
-sns.set_style("darkgrid")
+sns.set_style("whitegrid")
 plt.plot(time,sig_filt)
+plt.vlines(least_onset, ymin=0, ymax=1, color='b', label='onset')
+plt.vlines(least_offset, ymin=0, ymax=1, color = 'r', label='offset')
+plt.title('Post-processed Signal')
+plt.xlabel('Time (s)') 
+plt.ylabel('Voltage (V)')
+plt.legend()
 plt.show()
