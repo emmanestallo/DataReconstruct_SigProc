@@ -14,12 +14,12 @@ fc2 = 450
 fc3 = 20 
 
 #filter parameters
-b10Hz, a10Hz = sigproc.butter(4,10,'high', analog=False, fs=2000) 
-#b450Hz, a450Hz = sigproc.butter(4,450,'low', analog=False, fs= 2000) 
-b20Hz, a20Hz = sigproc.butter(2,20,'low', analog=False, fs=2000)
+b10Hz, a10Hz = sigproc.butter(4,fc1,'high', analog=False, fs=2000) 
+#b450Hz, a450Hz = sigproc.butter(4,fc2,'low', analog=False, fs= 2000) 
+b20Hz, a20Hz = sigproc.butter(2,fc3,'low', analog=False, fs=2000)
 
 #filter and envelope detector
-sig1 = sigproc.filtfilt(b10Hz,a10Hz, val) 
+sig1 = sigproc.filtfilt(b10Hz,a10Hz,val) 
 rs = np.abs(sig1)
 #sig2 = sigproc.filtfilt(b450Hz,a450Hz, sig1) 
 
@@ -38,43 +38,51 @@ sets = [sig_filt[n:n+nsamp] for n in range(0,len(sig_filt),nsamp)]
 SD = np.array([np.std(element) for element in sets])
 mean = np.array([np.mean(element) for element in sets])
 
-min_SD_idx = np.where(SD == np.min(SD))
+min_SD_idx = np.argmin(np.min(SD))
 mean_min_idx = mean[min_SD_idx]  
 
-h=3
+h=5
 
-th = mean_min_idx + h*np.min(SD) 
+th = mean_min_idx + h*np.min(SD)
 
-onset = [] 
-offset = []
+onset_idx = [] 
+onset_time = []
+offset_idx = []
+offset_time = []
 
-for idx in range(len(val)-25):
+for idx in range(len(sig_filt)):
     decision = []
-    to_comp = val[idx:idx+25]
+    to_comp = sig_filt[idx:idx+25]
     for elem in to_comp: 
         if elem < th: 
             decision.append(False) 
         else:
             decision.append(True) 
     if all(decision):
-        onset.append(val[idx])
+        if idx not in onset_idx:
+            onset_idx.append(idx)
+            onset_time.append(time[idx])
 
-for idx in range(len(val)-25):
+
+for idx in range(len(sig_filt)):
     decision = []
-    to_comp = val[idx:idx+25]
+    to_comp = sig_filt[idx:idx+25]
     for elem in to_comp: 
         if elem > th: 
             decision.append(False) 
         else:
             decision.append(True) 
     if all(decision):
-        offset.append(val[idx])
+        if idx not in offset_idx:
+            offset_idx.append(idx)
+            offset_time.append(time[idx])
+
 
 print(th)
-            
 
-print(len(onset)) 
-print(len(offset))
+
+print(onset_time)
+print(offset_time)
         
 
 sns.set()
