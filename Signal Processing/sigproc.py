@@ -28,16 +28,16 @@ period = 1/2000
 SD = []
 
 nsamp = int(window/period)
-pad = np.zeros(430) 
 
-zero_pad_val = np.append(val,pad)
+sets = [val[n:n+nsamp] for n in range(0,len(val),nsamp)]
 
-sets = [zero_pad_val[n:n+nsamp] for n in range(0,len(val),nsamp)]
+SD = np.array([np.std(element) for element in sets])
+mean = np.array([np.mean(element) for element in sets])
 
-SD = [np.std(element) for element in sets]
+min_SD_idx = np.where(SD == np.min(SD))
+mean_min_idx = mean[min_SD_idx]
 
-print(SD)
-
+print(mean_min_idx)
 sns.set()
 sns.set_style("darkgrid")
 plt.plot(time,rs)
