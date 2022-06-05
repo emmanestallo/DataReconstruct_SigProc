@@ -67,8 +67,6 @@ for idx in range (len(test_sig)):
         if offset:
             offset_time.append(time[idx]) 
 
-
-
 epsilon = 2
 
 least_onset = [] 
