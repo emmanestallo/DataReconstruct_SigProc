@@ -91,9 +91,6 @@ for j in range (1,len(offset_time)):
 print(least_onset)
 print(least_offset)
 
-print(onset_time)
-print(offset_time)
-
 sns.set()
 sns.set_style("whitegrid")
 plt.plot(time,sig_filt)
