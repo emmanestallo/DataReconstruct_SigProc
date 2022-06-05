@@ -45,9 +45,29 @@ h=5
 
 th = mean_min_idx + h*np.min(SD)
 
-for i in range len(sig_filt):
-    
+onset_time = [] 
+offset_time = []
 
+for idx in range (len(sig_filt)): 
+    if (sig_filt[idx] > th) and (len(onset_time) == len(offset_time)): 
+        onset = True 
+        for element in sig_filt[idx:idx+25]:
+            if element < th: 
+                onset = False 
+        if onset:
+            onset_time.append(time[idx]) 
+
+    elif (sig_filt[idx] < th) and (len(onset_time) > len(offset_time)): 
+        offset = True
+        for element in sig_filt[idx:idx+25]:
+            if element > th: 
+                offset = False 
+        if offset:
+            offset_time.append(time[idx])
+
+
+print(onset_time)
+print(offset_time)
 sns.set()
 sns.set_style("darkgrid")
 plt.plot(time,sig_filt)
