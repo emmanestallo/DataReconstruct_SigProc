@@ -95,9 +95,10 @@ sns.set_style("whitegrid")
 
 fig, ax = plt.subplots(2,1)
 ax[0].plot(time,val, color='y', label = 'DAC Output')
-ax[0].set_title('Reconsctructed EMG Signal, A_Normal_2')
+ax[0].set_title('Reconstructed EMG Signal, A_Normal_2')
 ax[0].set_xlabel('Time (s)') 
 ax[0].set_ylabel('Voltage (V)')
+ax[0].legend()
 
 
 ax[1].plot(time,sig_filt, color='y', label = 'envelope')
