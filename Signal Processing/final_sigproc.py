@@ -102,7 +102,6 @@ ax[0].set_xlabel('Time (s)')
 ax[0].set_ylabel('Voltage (V)')
 ax[0].legend()
 
-
 ax[1].plot(time,sig_filt, color='y', label = 'envelope')
 ax[1].vlines(least_onset, ymin=0, ymax=1, color='b', label='onset')
 ax[1].vlines(least_offset, ymin=0, ymax=1, color = 'r', label='offset')
@@ -110,8 +109,19 @@ ax[1].set_title(f'EMG Signal Envelope without Baseline Noise, {test_file}')
 ax[1].set_xlabel('Time (s)') 
 ax[1].set_ylabel('Voltage (V)')
 ax[1].legend()
-
 plt.plot()
-
 plt.tight_layout()
 plt.show()
+
+plt.figure('Superimposed Reconstructed Signal')
+plt.title('Original and Processed Signal')
+plt.plot(time, abs(val), color = 'c', label = 'Original Signal')
+plt.plot(time, sig_filt, color = 'y', label = 'Processed Signal') 
+plt.vlines(least_onset, ymin=0, ymax=2, color='b', label='Onset Time')
+plt.vlines(least_offset, ymin=0, ymax=2, color = 'r', label='Offset Time')
+plt.xlabel('Time (s)')
+plt.ylabel('Voltage (V)')
+plt.legend(loc='upper right')
+plt.show()
+
+
