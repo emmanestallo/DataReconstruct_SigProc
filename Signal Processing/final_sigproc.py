@@ -4,7 +4,9 @@ import pandas as pd
 import matplotlib.pyplot as plt 
 import seaborn as sns 
 
-data = pd.read_csv('demod_out_C_Normal_2.csv')
+test_file = 'analog_out'
+
+data = pd.read_csv(f'{test_file}.csv')
 
 time = data['Time'].to_numpy()
 val = data['Values'].to_numpy()
@@ -95,7 +97,7 @@ sns.set_style("whitegrid")
 
 fig, ax = plt.subplots(2,1)
 ax[0].plot(time,val, color='y', label = 'DAC Output')
-ax[0].set_title('Reconstructed EMG Signal, A_Normal_2')
+ax[0].set_title(f'Reconstructed EMG Signal, {test_file}')
 ax[0].set_xlabel('Time (s)') 
 ax[0].set_ylabel('Voltage (V)')
 ax[0].legend()
@@ -104,10 +106,12 @@ ax[0].legend()
 ax[1].plot(time,sig_filt, color='y', label = 'envelope')
 ax[1].vlines(least_onset, ymin=0, ymax=1, color='b', label='onset')
 ax[1].vlines(least_offset, ymin=0, ymax=1, color = 'r', label='offset')
-ax[1].set_title('EMG Signal Envelope without Baseline Noise, A_Normal_2')
+ax[1].set_title(f'EMG Signal Envelope without Baseline Noise, {test_file}')
 ax[1].set_xlabel('Time (s)') 
 ax[1].set_ylabel('Voltage (V)')
 ax[1].legend()
+
+plt.plot()
 
 plt.tight_layout()
 plt.show()
