@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt 
 import seaborn as sns 
 
-test_file = 'demod_out_B_Normal_1'
+test_file = 'analog_out'
 
 data = pd.read_csv(f'{test_file}.csv')
 
@@ -70,7 +70,7 @@ for idx in range (len(test_sig)):
         if offset:
             offset_time.append(time[idx]) 
 
-epsilon = 2
+epsilon = 3 #0.6 if BPI 
 
 least_onset = [] 
 least_offset = [] 
