@@ -42,16 +42,11 @@ data_1.columns = ['Time','Value']
 data_2 = pd.read_csv('demod_out_C_Normal_2.txt', sep=" ", header=None)
 data_2.columns = ['Time','Value'] 
 
-data_3 = pd.read_csv('analog_tran_out.txt', sep=" ", header=None)
-data_3.columns = ['Time','Value'] 
-
 time_1,analog_values_1 = get_time_value(data_1)
 time_2,analog_values_2 = get_time_value(data_2)
-time_3,analog_values_3 = get_time_value(data_3)
 
 export_xlsx(time_1, analog_values_1,'demod_out_A_normal_2')
 export_xlsx(time_2, analog_values_2,'demod_out_C_normal_2')
-export_xlsx(time_3, analog_values_3,'analog_tran_out')
 
 #plotting 
 sns.set()
@@ -64,10 +59,10 @@ axes[1].plot(time_2,analog_values_2)
 axes[0].set_title('demod_out_A_Normal_2')
 axes[1].set_title('demod_out_C_Normal_2')
 
-axes[0].set_ylabel('Voltage (mV)')
+axes[0].set_ylabel('Voltage (V)')
 axes[0].set_xlabel('Time (s)')
 
-axes[1].set_ylabel('Voltage (mV)')
+axes[1].set_ylabel('Voltage (V)')
 axes[1].set_xlabel('Time (s)')
 
 plt.tight_layout()

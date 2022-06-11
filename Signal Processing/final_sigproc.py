@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt 
 import seaborn as sns 
 
-test_file = 'analog_out'
+test_file = 'analog_b_bpi_trial_1'
 
 data = pd.read_csv(f'{test_file}.csv')
 
@@ -114,7 +114,7 @@ plt.tight_layout()
 plt.show()
 
 plt.figure('Superimposed Reconstructed Signal')
-plt.title('Original and Processed Signal')
+plt.title(f'{test_file}')
 plt.plot(time, abs(sig2), color = 'c', label = 'Original Signal')
 plt.plot(time, sig_filt, color = 'y', label = 'Processed Signal') 
 plt.vlines(least_onset, ymin=0, ymax=2, color='b', label='Onset Time')
